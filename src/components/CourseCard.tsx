@@ -1,41 +1,29 @@
-// src/components/CourseCard.tsx
-import { toggleFavorite, getProgress, addCompletedCourse } from '../utils/storage';
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
+// Define the CourseCardProps interface to include all the necessary props
 interface CourseCardProps {
   courseId: string;
   title: string;
   description: string;
-  isFavorite: boolean;
+  isFavorite: boolean;  // Add isFavorite here
   progress: number;
   isCompleted: boolean;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({
-  courseId,
-  title,
-  description,
-  isFavorite,
-  progress,
-  isCompleted
+const CourseCard: React.FC<CourseCardProps> = ({ 
+  courseId, 
+  title, 
+  description, 
+  isFavorite, 
+  progress, 
+  isCompleted 
 }) => {
-  const [isFavoriteState, setIsFavoriteState] = useState(isFavorite);
-  const [progressState, setProgressState] = useState(progress);
-  const [isCompletedState, setIsCompletedState] = useState(isCompleted);
-
-  useEffect(() => {
-    // Update based on incoming props if necessary
-  }, [courseId]);
+  const [localIsFavorite, setLocalIsFavorite] = useState(isFavorite);
 
   const handleFavoriteToggle = () => {
-    toggleFavorite(courseId);
-    setIsFavoriteState(!isFavoriteState);
-  };
-
-  const handleCompleteCourse = () => {
-    addCompletedCourse(courseId);
-    setProgressState(100);
-    setIsCompletedState(true);
+    // Handle favorite toggle logic
+    setLocalIsFavorite(!localIsFavorite);
+    // You can add any additional logic to handle favorite persistence here (e.g., localStorage)
   };
 
   return (
@@ -45,19 +33,17 @@ const CourseCard: React.FC<CourseCardProps> = ({
       <div className="mt-4">
         <button
           onClick={handleFavoriteToggle}
-          className={`text-lg ${isFavoriteState ? 'text-red-500' : 'text-gray-500'}`}
+          className={`text-lg ${localIsFavorite ? 'text-red-500' : 'text-gray-500'}`}
         >
-          {isFavoriteState ? '💖 Favorited' : '🤍 Mark as Favorite'}
+          {localIsFavorite ? '💖 Favorited' : '🤍 Mark as Favorite'}
         </button>
       </div>
       <div className="mt-2 flex items-center gap-4">
-        <span className="text-sm text-gray-500">Progress: {progressState}%</span>
-        {isCompletedState ? (
+        <span className="text-sm text-gray-500">Progress: {progress}%</span>
+        {isCompleted ? (
           <span className="text-xs px-2 py-1 bg-green-200 text-green-800 rounded-full">Completed</span>
         ) : (
-          <button onClick={handleCompleteCourse} className="px-2 py-1 bg-blue-500 text-white rounded-full">
-            Mark as Complete
-          </button>
+          <span className="text-xs px-2 py-1 bg-blue-500 text-white rounded-full">In Progress</span>
         )}
       </div>
     </div>
