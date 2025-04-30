@@ -1,8 +1,9 @@
-import { getFavorites } from '../utils/storage';
+import { getFavorites, getProgress } from '../utils/storage';
 import CourseCard from '../components/CourseCard';
 
 export default function Favorites() {
   const favorites = getFavorites();
+  const progress = getProgress();  // Get progress data
 
   return (
     <div className="p-8">
@@ -11,14 +12,22 @@ export default function Favorites() {
         {favorites.length === 0 ? (
           <p className="text-center">No favorite courses yet!</p>
         ) : (
-          favorites.map(courseId => (
-            <CourseCard
-              key={courseId}
-              courseId={courseId}
-              title={`Course ${courseId}`}
-              description={`Description for ${courseId}`}
-            />
-          ))
+          favorites.map(courseId => {
+            const courseProgress = progress[courseId] || 0;  // Get course progress for each favorite
+            const isCompleted = courseProgress === 100;
+
+            return (
+              <CourseCard
+                key={courseId}
+                courseId={courseId}
+                title={`Course ${courseId}`}
+                description={`Description for ${courseId}`}
+                isFavorite={true}  // Always true since it's a favorite
+                progress={courseProgress}
+                isCompleted={isCompleted}
+              />
+            );
+          })
         )}
       </div>
     </div>
