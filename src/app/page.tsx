@@ -1,4 +1,5 @@
-// src/app/page.tsx
+"use client";  // Add this line at the top
+
 import { useEffect, useState } from "react";
 import CourseCard from "../components/CourseCard";
 import { getFavorites, getProgress } from "../utils/storage"; // Ensure this import is correct
